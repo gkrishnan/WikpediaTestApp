@@ -12,7 +12,7 @@
  *
  ******************************************************************************/
 
-package com.intuit.txtweb.server.example.wikipedia;
+package com.txtweb.wikipedia;
 
 import java.io.IOException;
 import java.io.PrintWriter;

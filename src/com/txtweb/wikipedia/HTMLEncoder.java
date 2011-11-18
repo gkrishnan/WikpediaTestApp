@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 //package org.apache.myfaces.renderkit.html.util;
-package com.intuit.txtweb.server.example.wikipedia;
+package com.txtweb.wikipedia;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -76,7 +76,7 @@ public abstract class HTMLEncoder
             c = string.charAt(i);
             
             // All characters before letters
-            if (c < 0x41)
+            if ((int)c < 0x41)
             {
                 switch (c)
                 {
@@ -99,7 +99,7 @@ public abstract class HTMLEncoder
                         }
                         break;
                 }
-            } else if (encodeNonLatin && c > 0x80) {
+            } else if (encodeNonLatin && (int)c > 0x80) {
                  switch(c) {
                     //german umlauts
                     case '\u00E4' : app = "&auml;";  break;
@@ -142,7 +142,10 @@ public abstract class HTMLEncoder
         {
             return string;
         }
-		return sb.toString();
+        else
+        {
+            return sb.toString();
+        }
     }
 
     /**
@@ -186,20 +189,20 @@ public abstract class HTMLEncoder
         {
             return;
         }
-        int maxOffset = Math.max(0, offset);
-        int realLength = Math.min(length, string.length - maxOffset);
+        offset = Math.max(0, offset);
+        int realLength = Math.min(length, string.length - offset);
 
         StringBuilder sb = null;    //create later on demand
         String app;
         char c;
         
-        for (int i = maxOffset; i < maxOffset + realLength; ++i)
+        for (int i = offset; i < offset + realLength; ++i)
         {
             app = null;
             c = string[i];
 
             // All characters before letters
-            if (c < 0x41)
+            if ((int)c < 0x41)
             {
                 switch (c)
                 {
@@ -222,7 +225,7 @@ public abstract class HTMLEncoder
                         }
                         break;
                 }
-            } else if (encodeNonLatin && c > 0x80) {
+            } else if (encodeNonLatin && (int)c > 0x80) {
                  switch(c) {
                     //german umlauts
                     case '\u00E4' : app = "&auml;";  break;
@@ -251,7 +254,7 @@ public abstract class HTMLEncoder
                 if (sb == null)
                 {
                     sb = new StringBuilder(realLength*2);
-                    sb.append(string, maxOffset, i - maxOffset);
+                    sb.append(string, offset, i - offset);
                 }
                 sb.append(app);
             } else {
@@ -264,7 +267,7 @@ public abstract class HTMLEncoder
 
         if (sb == null)
         {
-            writer.write(string, maxOffset, realLength);
+            writer.write(string, offset, realLength);
         }
         else
         {
@@ -490,7 +493,10 @@ public abstract class HTMLEncoder
         {
             return string;
         }
-		return sb.toString();
+        else
+        {
+            return sb.toString();
+        }
     }
     
     /**
@@ -537,8 +543,8 @@ public abstract class HTMLEncoder
         for (int i=0; i < byteArray.length; i++)
         {
             builder.append('%');
-            builder.append(HEX_CHARSET.charAt( (( (byteArray[i] & 0xFF ) >> 0x4) % 0x10)) );
-            builder.append(HEX_CHARSET.charAt( (byteArray[i] & 0xFF ) % 0x10));
+            builder.append(HEX_CHARSET.charAt( (( ((short) byteArray[i] & 0xFF ) >> 0x4) % 0x10)) );
+            builder.append(HEX_CHARSET.charAt( ((short) byteArray[i] & 0xFF ) % 0x10));
         }
         
         return builder.toString();
@@ -653,6 +659,9 @@ public abstract class HTMLEncoder
         {
             return string;
         }
-		return sb.toString();
+        else
+        {
+            return sb.toString();
+        }
     }
 }
